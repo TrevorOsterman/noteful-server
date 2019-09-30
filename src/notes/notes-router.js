@@ -46,6 +46,24 @@ notesRouter
         res.status(204).end();
       })
       .catch(next);
+  })
+  .patch(jsonParser, (req, res, next) => {
+    const { title, content, folder } = req.body;
+    const noteToUpdate = { title, content, folder };
+
+    const numberOfValues = Object.values(noteToUpdate).filter(Boolean).length;
+    if (numberOfValues === 0)
+      return res.status(400).json({
+        error: {
+          message: `Request must contain 'title', 'content', or 'folder'`
+        }
+      });
+
+    NotesService.updateNote(
+      req.app.get("db"),
+      req.params.note_id,
+      noteToUpdate
+    ).then(numRowsAffected => res.status(204).end());
   });
 
 module.exports = notesRouter;

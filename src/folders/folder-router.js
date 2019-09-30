@@ -51,6 +51,25 @@ folderRouter
         res.status(204).end();
       })
       .catch(next);
+  })
+  .patch(jsonParser, (req, res, next) => {
+    const { title } = req.body;
+    const folderToUpdate = { title };
+
+    if (!folderToUpdate)
+      return res
+        .status(400)
+        .json({ error: { message: `Request body must contain title` } });
+
+    FolderService.updateFolder(
+      req.app.get("db"),
+      req.params.folder_id,
+      folderToUpdate
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
 
 module.exports = folderRouter;

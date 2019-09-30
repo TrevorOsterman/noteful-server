@@ -24,6 +24,12 @@ const NotesService = {
       .select("*")
       .where("folder", id);
   },
+  updateNote(knex, id, updatedNote) {
+    return knex("noteful_notes")
+      .where({ id })
+      .update(updatedNote);
+  },
+
   deleteNote(knex, id) {
     return knex
       .from("noteful_notes")
